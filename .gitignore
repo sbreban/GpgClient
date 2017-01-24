@@ -16,4 +16,4 @@ hs_err_pid*
 
 out/
 .idea/
-gpg-client.iml
+*.iml
