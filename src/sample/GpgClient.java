@@ -1,8 +1,6 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -75,13 +73,10 @@ public class GpgClient extends Application {
     grid.add(fileOpenBox, 1, 4);
 
     openButton.setOnAction(
-        new EventHandler<ActionEvent>() {
-          @Override
-          public void handle(final ActionEvent e) {
-            File file = fileChooser.showOpenDialog(primaryStage);
-            if (file != null) {
-              fileTextField.setText(file.getAbsolutePath());
-            }
+        e -> {
+          File file = fileChooser.showOpenDialog(primaryStage);
+          if (file != null) {
+            fileTextField.setText(file.getAbsolutePath());
           }
         });
 
@@ -94,43 +89,36 @@ public class GpgClient extends Application {
     final Text actiontarget = new Text();
     grid.add(actiontarget, 1, 6);
 
-    encryptButton.setOnAction(new EventHandler<ActionEvent>() {
+    encryptButton.setOnAction(e -> {
+      actiontarget.setFill(Color.FIREBRICK);
 
-      @Override
-      public void handle(ActionEvent e) {
-        actiontarget.setFill(Color.FIREBRICK);
+      String recipient = userTextField.getText();
+      String filePath = fileTextField.getText();
+      String outputFilePath = filePath + ".gpg";
 
-        String recipient = userTextField.getText();
-        String filePath = fileTextField.getText();
-        String outputFilePath = filePath + ".gpg";
-
-        int exitStatus = controller.encryptFile(outputFilePath, recipient, filePath);
-        if (exitStatus == 0) {
-          actiontarget.setText("Success");
-        } else {
-          actiontarget.setText("Failure");
-        }
+      int exitStatus = controller.encryptFile(outputFilePath, recipient, filePath);
+      if (exitStatus == 0) {
+        actiontarget.setText("Success");
+      } else {
+        actiontarget.setText("Failure");
       }
     });
 
     Button decryptButton = new Button("Decrypt");
     hbBtn.getChildren().add(decryptButton);
 
-    decryptButton.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent e) {
-        actiontarget.setFill(Color.FIREBRICK);
+    decryptButton.setOnAction(e -> {
+      actiontarget.setFill(Color.FIREBRICK);
 
-        String passphrase = pwBox.getText();
-        String filePath = fileTextField.getText();
-        String outputFilePath = filePath.substring(0, filePath.indexOf(".gpg"));
+      String passphrase = pwBox.getText();
+      String filePath = fileTextField.getText();
+      String outputFilePath = filePath.substring(0, filePath.indexOf(".gpg"));
 
-        int exitStatus = controller.decryptFile(passphrase, outputFilePath, filePath);
-        if (exitStatus == 0) {
-          actiontarget.setText("Success");
-        } else {
-          actiontarget.setText("Failure " + exitStatus);
-        }
+      int exitStatus = controller.decryptFile(passphrase, outputFilePath, filePath);
+      if (exitStatus == 0) {
+        actiontarget.setText("Success");
+      } else {
+        actiontarget.setText("Failure " + exitStatus);
       }
     });
 
@@ -140,19 +128,16 @@ public class GpgClient extends Application {
     getKeyHbBtn.getChildren().add(getKeyButton);
     grid.add(getKeyHbBtn, 0, 5);
 
-    getKeyButton.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent e) {
-        actiontarget.setFill(Color.FIREBRICK);
+    getKeyButton.setOnAction(e -> {
+      actiontarget.setFill(Color.FIREBRICK);
 
-        String recipient = userTextField.getText();
+      String recipient = userTextField.getText();
 
-        int exitStatus = controller.getPublicKey(recipient);
-        if (exitStatus == 0) {
-          actiontarget.setText("Success! Public key received");
-        } else {
-          actiontarget.setText("Failure! Public key not found " + exitStatus);
-        }
+      int exitStatus = controller.getPublicKey(recipient);
+      if (exitStatus == 0) {
+        actiontarget.setText("Success! Public key received");
+      } else {
+        actiontarget.setText("Failure! Public key not found " + exitStatus);
       }
     });
 

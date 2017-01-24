@@ -1,35 +1,31 @@
 package sample;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Controller {
+
+  private EncryptDecryptInterface encryptDecryptInterface = new GPGEncryptDecryptImplementation();
+
   public int encryptFile(String outputFilePath, String recipient, String filePath) {
-    int exitStatus = -1;
-    try {
-      Process process = new ProcessBuilder("gpg", "--output", outputFilePath, "-a", "--encrypt", "--recipient", recipient, filePath).start();
-      exitStatus = process.waitFor();
-    } catch (IOException | InterruptedException ex) {
-      ex.printStackTrace();
+    deleteFile(outputFilePath);
+    return encryptDecryptInterface.encryptFile(outputFilePath, recipient, filePath);
+  }
+
+  private void deleteFile(String outputFilePath) {
+    File file = new File(outputFilePath);
+    if (file.delete()) {
+      System.out.println("File deleted");
+    } else {
+      System.out.println("Delete failed");
     }
-    return exitStatus;
   }
 
   public int decryptFile(String passphrase, String outputFilePath, String filePath) {
-    int exitStatus = -1;
-    try {
-      Process process;
-      if (passphrase != null && !passphrase.isEmpty()) {
-        process = new ProcessBuilder("gpg", "--output", outputFilePath, "--decrypt", "--no-tty", "--passphrase", passphrase, filePath).start();
-      } else {
-        process = new ProcessBuilder("gpg", "--output", outputFilePath, "--decrypt", "--no-tty", filePath).start();
-      }
-      exitStatus = process.waitFor();
-    } catch (InterruptedException | IOException e) {
-      e.printStackTrace();
-    }
-    return exitStatus;
+    deleteFile(outputFilePath);
+    return encryptDecryptInterface.decryptFile(passphrase, outputFilePath, filePath);
   }
 
   public int getPublicKey(String recipient) {
