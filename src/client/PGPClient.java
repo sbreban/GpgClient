@@ -1,4 +1,4 @@
-package sample;
+package client;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -20,13 +20,13 @@ import javafx.stage.Stage;
 
 import java.io.File;
 
-public class GpgClient extends Application {
+public class PGPClient extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
     Controller controller = new Controller();
 
-    primaryStage.setTitle("GPG Client");
+    primaryStage.setTitle("PGP Client");
 
     GridPane grid = new GridPane();
     grid.setAlignment(Pos.CENTER);
@@ -38,7 +38,7 @@ public class GpgClient extends Application {
     columnConstraints.setPercentWidth(35.0);
     grid.getColumnConstraints().add(columnConstraints);
 
-    Scene scene = new Scene(grid, 300, 275);
+    Scene scene = new Scene(grid, 350, 250);
     primaryStage.setScene(scene);
 
     Text scenetitle = new Text("Welcome");

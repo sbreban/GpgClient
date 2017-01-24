@@ -1,4 +1,7 @@
-package sample;
+package client;
+
+import client.gpg.GPGConstants;
+import client.gpg.GPGEncryptDecryptImplementation;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,9 +34,9 @@ public class Controller {
   public int getPublicKey(String recipient) {
     int exitStatus = -1;
     try {
-      Process process = new ProcessBuilder("gpg", "--keyserver", "pgp.mit.edu", "--search-keys", "--no-tty", recipient).start();
+      Process process = new ProcessBuilder(GPGConstants.gpg, GPGConstants.keyserver, GPGConstants.keyserverAddress, GPGConstants.searchkeys, GPGConstants.notty, recipient).start();
 
-      exitStatus = process.waitFor();
+      process.waitFor();
 
       BufferedReader reader =
           new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -61,18 +64,18 @@ public class Controller {
         System.out.println(keyID);
         System.out.println();
 
-        process = new ProcessBuilder("gpg", "--keyserver", "pgp.mit.edu", "--recv-keys", "--no-tty", keyID).start();
-        exitStatus = process.waitFor();
+        if (!keyID.isEmpty()) {
+          process = new ProcessBuilder(GPGConstants.gpg, GPGConstants.keyserver, GPGConstants.keyserverAddress, GPGConstants.recvkeys, GPGConstants.notty, keyID).start();
+          exitStatus = process.waitFor();
 
-        reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+          reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
 
-        output = new StringBuilder();
-        while ((line = reader.readLine()) != null) {
-          output.append(line).append("\n");
+          output = new StringBuilder();
+          while ((line = reader.readLine()) != null) {
+            output.append(line).append("\n");
+          }
+          System.out.println(output.toString());
         }
-        System.out.println(output.toString());
-      } else {
-        exitStatus = -1;
       }
 
     } catch (IOException | InterruptedException ex) {

@@ -1,4 +1,6 @@
-package sample;
+package client.gpg;
+
+import client.EncryptDecryptInterface;
 
 import java.io.IOException;
 
@@ -10,7 +12,7 @@ public class GPGEncryptDecryptImplementation implements EncryptDecryptInterface 
   public int encryptFile(String outputFilePath, String recipient, String filePath) {
     int exitStatus = -1;
     try {
-      Process process = new ProcessBuilder("gpg", "--output", outputFilePath, "-a", "--encrypt", "--recipient", recipient, filePath).start();
+      Process process = new ProcessBuilder(GPGConstants.gpg, GPGConstants.output, outputFilePath, GPGConstants.armor, GPGConstants.encrypt, GPGConstants.recipient, recipient, filePath).start();
       exitStatus = process.waitFor();
     } catch (IOException | InterruptedException ex) {
       ex.printStackTrace();
@@ -24,9 +26,9 @@ public class GPGEncryptDecryptImplementation implements EncryptDecryptInterface 
     try {
       Process process;
       if (passphrase != null && !passphrase.isEmpty()) {
-        process = new ProcessBuilder("gpg", "--output", outputFilePath, "--decrypt", "--no-tty", "--passphrase", passphrase, filePath).start();
+        process = new ProcessBuilder(GPGConstants.gpg, GPGConstants.output, outputFilePath, GPGConstants.decrypt, GPGConstants.notty, GPGConstants.passphrase, passphrase, filePath).start();
       } else {
-        process = new ProcessBuilder("gpg", "--output", outputFilePath, "--decrypt", "--no-tty", filePath).start();
+        process = new ProcessBuilder(GPGConstants.gpg, GPGConstants.output, outputFilePath, GPGConstants.decrypt, GPGConstants.notty, filePath).start();
       }
       exitStatus = process.waitFor();
     } catch (InterruptedException | IOException e) {

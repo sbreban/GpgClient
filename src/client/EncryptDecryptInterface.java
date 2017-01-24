@@ -1,4 +1,4 @@
-package sample;
+package client;
 
 /**
  * Created by sbreban on 1/24/17.
