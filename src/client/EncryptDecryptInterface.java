@@ -5,5 +5,5 @@ package client;
  */
 public interface EncryptDecryptInterface {
   int encryptFile(String outputFilePath, String recipient, String filePath);
-  int decryptFile(String passphrase, String outputFilePath, String filePath);
+  int decryptFile(String passphrase, String outputFilePath, String filePath, String recipient);
 }

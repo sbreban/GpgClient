@@ -21,7 +21,7 @@ public class GPGEncryptDecryptImplementation implements EncryptDecryptInterface 
   }
 
   @Override
-  public int decryptFile(String passphrase, String outputFilePath, String filePath) {
+  public int decryptFile(String passphrase, String outputFilePath, String filePath, String recipient) {
     int exitStatus = -1;
     try {
       Process process;

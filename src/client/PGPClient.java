@@ -110,11 +110,12 @@ public class PGPClient extends Application {
     decryptButton.setOnAction(e -> {
       actiontarget.setFill(Color.FIREBRICK);
 
+      String recipient = userTextField.getText();
       String passphrase = pwBox.getText();
       String filePath = fileTextField.getText();
       String outputFilePath = filePath.substring(0, filePath.indexOf(".gpg"));
 
-      int exitStatus = controller.decryptFile(passphrase, outputFilePath, filePath);
+      int exitStatus = controller.decryptFile(passphrase, outputFilePath, filePath, recipient);
       if (exitStatus == 0) {
         actiontarget.setText("Success");
       } else {

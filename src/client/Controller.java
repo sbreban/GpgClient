@@ -2,6 +2,7 @@ package client;
 
 import client.gpg.GPGConstants;
 import client.gpg.GPGEncryptDecryptImplementation;
+import client.gpg.bouncycastle.GPGBouncyCastleImplementation;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,6 +12,7 @@ import java.io.InputStreamReader;
 public class Controller {
 
   private EncryptDecryptInterface encryptDecryptInterface = new GPGEncryptDecryptImplementation();
+  //private EncryptDecryptInterface encryptDecryptInterface = new GPGBouncyCastleImplementation();
 
   public int encryptFile(String outputFilePath, String recipient, String filePath) {
     deleteFile(outputFilePath);
@@ -26,9 +28,9 @@ public class Controller {
     }
   }
 
-  public int decryptFile(String passphrase, String outputFilePath, String filePath) {
+  public int decryptFile(String passphrase, String outputFilePath, String filePath, String recipient) {
     deleteFile(outputFilePath);
-    return encryptDecryptInterface.decryptFile(passphrase, outputFilePath, filePath);
+    return encryptDecryptInterface.decryptFile(passphrase, outputFilePath, filePath, recipient);
   }
 
   public int getPublicKey(String recipient) {
